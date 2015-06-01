@@ -18,18 +18,8 @@ endif
 " When I want to change thing
 nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
 
-" SLIME
-let g:slime_target = "tmux"
-
-au BufNewFile,BufRead *.pt,*.cpt,*.zpt set filetype=zpt syntax=xml
-au BufNewFile,BufRead *.ejs set filetype=html
-au BufRead,BufNewFile todo.txt,done.txt set filetype=todo
-" read our profile for $PATH and other environment vairables
-silent !source ~/.profile
-set rtp+=/Users/enmand/.vim/bundle/powerline/powerline/bindings/vim
 filetype off
 filetype plugin indent off
-set rtp+=/usr/local/go/misc/vim/
 filetype plugin indent on
 syntax on
 
@@ -62,12 +52,12 @@ set tabstop=4
 set ci
 set copyindent                  " Preserve vertical alignment when indenting
 set autoindent tabstop=4 shiftwidth=4
-set colorcolumn=61,81              " Highlight long lines
+set colorcolumn=81,111              " Highlight long lines
 set hlsearch
 set hidden
 set title
 
-match ErrorMsg '\%>80v.\+'
+match ErrorMsg '\%>110v.\+'
 
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
 
@@ -102,9 +92,6 @@ if has("unix")
 	endif
 endif
 
-set guioptions-=m  "remove menu bar
-set guioptions-=T  "remove toolbar
-
 " Enable omni completion. Not required if they are already set elsewhere in
 " .vimrc
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -113,30 +100,12 @@ autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
-" Enable heavy omni completion, which require computational power and may stall the vim.
-if !exists('g:neocomplcache_omni_patterns')
-  let g:neocomplcache_omni_patterns = {}
-endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " Helpers. Trailing space isn't a mistake
 nnoremap <leader>a :Ack --ignore-dir=node_modules --ignore-dir=build --ignore-dir=vendor 
-nmap <leader>wt :tabclose<cr>
-nmap <leader>nt :tabnew<cr>
-nmap <leader><left> :tabprevious<cr>
-nmap <leader><right> :tabnext<cr>
-
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplMapCTabSwitchBufs = 1
-let g:miniBufExplModSelTarget = 1
 
 let NERDTreeIgnore = ['\.pyc$', '^__pycache__$']
-
-let g:neocomplcache_enable_at_startup = 0
 
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
@@ -146,7 +115,6 @@ let g:syntastic_ruby_checkers = ['mri', 'rubocop']
 
 " Ignore node_modules in ctrlp
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|__pycache__|.git|.hg|.svn|.npm)$'
-let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
 
 " NERDTree can be a little annoying
 let g:nerdtree_tabs_open_on_gui_startup = 0
@@ -246,3 +214,12 @@ if has("unix")
 		imap <Esc>0 10gt
 	endif
 endif
+
+set nowrap
+set clipboard=unnamed
+
+" filenames like *.xml, *.html, *.xhtml
+let g:closetag_filenames = "*.xml,*.html,*.xhtml"
+
+set backupdir=$TMPDIR//
+set directory=$TMPDIR//
