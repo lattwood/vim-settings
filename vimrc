@@ -5,18 +5,19 @@ call pathogen#infect()
 if has("syntax")
   syntax on
 endif
+    "set t_Co=256
 
 let mapleader=","
 set mouse=a
 
 if has("autocmd")
-        filetype plugin indent on
-		autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-		autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+    filetype plugin indent on
+	autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 endif
 
 " When I want to change thing
-nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
+nnoremap <leader>ev <C-w><C-v><C-w>l:e $MYVIMRC<cr>
 
 filetype off
 filetype plugin indent off
@@ -44,7 +45,7 @@ set laststatus=2
 set statusline=%f\ %m%h%r%w\ %y\ %{fugitive#statusline()}%=\ B%3n\ ·\ L%5l/%5L\ ·\ C%7(%c%V%)\ ·\ %4(0x%B%)\ ·\ %P
 set incsearch           " Incremental search
 set nu
-set noexpandtab
+set expandtab
 set preserveindent
 set softtabstop=0
 set shiftwidth=4
@@ -74,24 +75,6 @@ set smartcase
 set backspace=2
 set nocompatible
 
-" MacVIM and gVIM options
-if has("unix")
-	let s:uname = system("uname")
-	if s:uname == "Darwin\n"
-		set guifont=Monaco\ for\ Powerline:h12
-		if has("gui_macvim")
-			let macvim_hig_shift_movement = 1
-			set guioptions-=T
-		endif
-	else
-		set guifont=Ubuntu\ Mono\ for\ Powerline\ 12
-		map <C-Left> <Esc>:tabprev<CR>
-		map <C-Right> <Esc>:tabnext<CR>
-		map <C-t> <Esc>:tabnew<CR>
-		map <C-x> <Esc>:tabclose<CR>
-	endif
-endif
-
 " Enable omni completion. Not required if they are already set elsewhere in
 " .vimrc
 autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
@@ -101,17 +84,26 @@ autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 
 autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+autocmd FileType ruby set tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType ruby set expandtab
+
+autocmd FileType rust set colorcolumn=99
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 
 " Helpers. Trailing space isn't a mistake
 nnoremap <leader>a :Ack --ignore-dir=node_modules --ignore-dir=build --ignore-dir=vendor 
 
-let NERDTreeIgnore = ['\.pyc$', '^__pycache__$']
-
 let g:syntastic_enable_signs=1
 let g:syntastic_auto_loc_list=1
-let g:syntastic_java_javac_config_file_enabled=1
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_ruby_checkers = ['mri', 'rubocop']
+let g:syntastic_puppet_puppetlint_quiet_messages = {
+            \ "level": "warnings",
+            \ "type": "style",
+            \ "regex": "80chars" }
+
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <C-w>E :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 " Ignore node_modules in ctrlp
 let g:ctrlp_custom_ignore = '\v[\/](node_modules|build|__pycache__|.git|.hg|.svn|.npm)$'
@@ -122,15 +114,32 @@ let g:nerdtree_tabs_open_on_new_tab = 0
 
 " YouCompleteMe
 let g:ycm_autoclose_preview_window_after_completion=1
+let g:ycm_semantic_triggers =  {
+            \   'c' : ['->', '.'],
+            \   'objc' : ['->', '.'],
+            \   'ocaml' : ['.', '#'],
+            \   'cpp,objcpp' : ['->', '.', '::'],
+            \   'perl' : ['->'],
+            \   'php' : ['->', '::', '"', "'", 'use ', 'namespace ', '\'],
+            \   'cs,java,javascript,typescript,d,python,perl6,scala,vb,elixir,go' : ['.'],
+            \   'html': ['<', '"', '</', ' '],
+            \   'vim' : ['re![_a-za-z]+[_\w]*\.'],
+            \   'ruby' : ['.', '::'],
+            \   'lua' : ['.', ':'],
+            \   'erlang' : [':'],
+            \   'haskell' : ['.', 're!.']
+            \ }
+let g:syntastic_typescript_tsc_fname = ''
+
 noremap <leader>jd YcmCompleter GoToDefinitionElseDeclaration
 
 " Highlight trailing whitespace
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
+" highlight ExtraWhitespace ctermbg=red guibg=red
+" match ExtraWhitespace /\s\+$/
+" autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+" autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd BufWinLeave * call clearmatches()
 
 map <F10> :NERDTreeToggle<cr>
 imap <F10> :NERDTreeToggle<cr>
@@ -168,58 +177,37 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-if has("unix")
-	let s:uname = system("uname")
-	if s:uname == "Darwin\n"
-		map <D-1> 1gt
-		imap <D-1> 1gt
-		map <D-2> 2gt
-		imap <D-2> 2gt
-		map <D-3> 3gt
-		imap <D-3> 3gt
-		map <D-4> 4gt
-		imap <D-4> 4gt
-		map <D-5> 5gt
-		imap <D-5> 5gt
-		map <D-6> 6gt
-		imap <D-6> 6gt
-		map <D-7> 7gt
-		imap <D-7> 7gt
-		map <D-8> 8gt
-		imap <D-8> 8gt
-		map <D-9> 9gt
-		imap <D-9> 9gt
-		map <D-0> 10gt
-		imap <D-0> 10gt
-	else
-		map <Esc>1 1gt
-		imap <Esc>1 1gt
-		map <Esc>2 2gt
-		imap <Esc>2 2gt
-		map <Esc>3 3gt
-		imap <Esc>3 3gt
-		map <Esc>4 4gt
-		imap <Esc>4 4gt
-		map <Esc>5 5gt
-		imap <Esc>5 5gt
-		map <Esc>6 6gt
-		imap <Esc>6 6gt
-		map <Esc>7 7gt
-		imap <Esc>7 7gt
-		map <Esc>8 8gt
-		imap <Esc>8 8gt
-		map <Esc>9 9gt
-		imap <Esc>9 9gt
-		map <Esc>0 10gt
-		imap <Esc>0 10gt
-	endif
-endif
-
-set nowrap
-set clipboard=unnamed
-
-" filenames like *.xml, *.html, *.xhtml
-let g:closetag_filenames = "*.xml,*.html,*.xhtml"
-
 set backupdir=$TMPDIR//
 set directory=$TMPDIR//
+
+let g:ycm_rust_src_path = '/Users/logan/src/github/rust/src'
+let g:rustfmt_autosave = 1
+
+let g:airline#extensions#tabline#enabled = 1
+let g:rehash256 = 1
+
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
+
+let g:airline_powerline_fonts = 1
+" let g:airline_left_sep = '▶'
+" let g:airline_left_alt_sep = '▷'
+" let g:airline_right_sep = '◀'
+" let g:airline_right_alt_sep = '◁'
+" let g:airline_symbols.crypt = '🔒'
+" let g:airline_symbols.linenr = '␊'
+" let g:airline_symbols.linenr = '␤'
+" let g:airline_symbols.linenr = '¶'
+" let g:airline_symbols.branch = '⎇'
+" let g:airline_symbols.paste = 'ρ'
+" let g:airline_symbols.whitespace = 'Ξ'
+
+set clipboard=unnamed
+
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
