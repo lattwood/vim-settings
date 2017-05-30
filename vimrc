@@ -5,7 +5,7 @@ call pathogen#infect()
 if has("syntax")
   syntax on
 endif
-    "set t_Co=256
+"set t_Co=256
 
 let mapleader=","
 set mouse=a
@@ -161,7 +161,7 @@ nnoremap <F5> :GundoToggle<CR>
 inoremap <F5> :GundoToggle<CR>
 vnoremap <F5> :GundoToggle<CR>
 
-colorscheme molokai
+colorscheme Tomorrow-Night
 set noerrorbells
 set vb
 
@@ -179,9 +179,6 @@ autocmd BufWinLeave * call clearmatches()
 
 set backupdir=$TMPDIR//
 set directory=$TMPDIR//
-
-let g:ycm_rust_src_path = '/Users/logan/src/github/rust/src'
-let g:rustfmt_autosave = 1
 
 let g:airline#extensions#tabline#enabled = 1
 let g:rehash256 = 1

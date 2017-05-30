@@ -61,3 +61,6 @@
 [submodule "bundle/vim-buffergator"]
 	path = bundle/vim-buffergator
 	url = git@github.com:jeetsukumaran/vim-buffergator.git
+[submodule "bundle/solarized-truecolor"]
+	path = bundle/solarized-truecolor
+	url = git@github.com:frankier/neovim-colors-solarized-truecolor-only.git

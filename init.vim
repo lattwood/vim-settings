@@ -1,1 +1,1 @@
-/Users/logan/.vimrc
+vimrc
