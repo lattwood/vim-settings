@@ -64,3 +64,9 @@
 [submodule "bundle/solarized-truecolor"]
 	path = bundle/solarized-truecolor
 	url = git@github.com:frankier/neovim-colors-solarized-truecolor-only.git
+[submodule "bundle/vim-terraform-completion"]
+	path = bundle/vim-terraform-completion
+	url = git@github.com:juliosueiras/vim-terraform-completion.git
+[submodule "bundle/neomake"]
+	path = bundle/neomake
+	url = git@github.com:neomake/neomake.git
